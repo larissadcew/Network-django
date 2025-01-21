@@ -25,7 +25,7 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
 ## 🛠️ Instalação
 
 1. **Clone o repositório**:
-   ```bash
+```bash
    git clone https://github.com/larissadcew/Network-django
    cd Network-django
 ```
