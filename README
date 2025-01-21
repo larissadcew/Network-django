@@ -23,6 +23,29 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
 - **requirements.txt**: Lista de dependências do projeto.
 
 
+
+## 🛠️ Instalação
+
+1. **Clone o repositório**:
+```bash
+   git clone https://github.com/larissadcew/Network-django
+   cd Network-django
+```
+
+2.Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
+
+3.Realize as migrações do banco de dados:
+```bash
+python manage.py runserver
+```
+
+Acesse a aplicação:
+Abra o navegador e vá para http://127.0.0.1:8000/
+
+
 🚀 Uso
 📝 Criar Post: Após o login, crie um novo post.
 👍 Curtir Posts: Veja os posts e curta ou descurta conforme desejar.
