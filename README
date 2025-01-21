@@ -26,12 +26,15 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
 
 1. **Clone o repositório**:
    ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd <NOME_DO_DIRETORIO>
+   git clone https://github.com/larissadcew/Network-django
+   cd Network-django
+```
+
 2.Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
+
 3.Realize as migrações do banco de dados:
 ```bash
 python manage.py runserver
