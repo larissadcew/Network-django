@@ -1,6 +1,8 @@
 # 🌐 Social Network Platform
 ![image](docs/networkfoto.png)
 
+[Veja ao vivo](docs/Social.mp4)
+
 Este é um projeto de plataforma de rede social desenvolvido com Django. Ele permite que os usuários criem e compartilhem posts, sigam outros usuários, curtam posts e gerenciem seus perfis.
 
 ## ✨ Funcionalidades
@@ -57,5 +59,6 @@ Abra o navegador e vá para http://127.0.0.1:8000/
 👍 Curtir Posts: Veja os posts e curta ou descurta conforme desejar.
 👥 Seguir Usuários: Siga ou deixe de seguir outros usuários para ver seus posts.
 📄 Gerenciar Perfil: Visualize e edite seu perfil de usuário.
+
 
 
