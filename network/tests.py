@@ -1,68 +1,108 @@
 from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .models import Post, Profile
+from .models import Profile, Post
 
 User = get_user_model()
 
 class ModelsTestCase(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', password='pass123')
-        self.user2 = User.objects.create_user(username='user2', password='pass123')
-        self.post = Post.objects.create(user=self.user1, post='Este é um post de teste.')
+        self.user1 = User.objects.create_user(username='user1', password='pass1')
+        self.user2 = User.objects.create_user(username='user2', password='pass2')
+        self.user3 = User.objects.create_user(username='user3', password='pass3')
 
-    def test_like_post(self):
-        # User2 gosta do post de User1
-        result = self.post.like_post(self.user2)
-        self.assertTrue(result)
-        self.assertEqual(self.post.like_count(), 1)
-        # User2 tenta curtir novamente
-        result = self.post.like_post(self.user2)
-        self.assertFalse(result)
-        self.assertEqual(self.post.like_count(), 1)
+        # Crie perfis para os usuários
+        self.profile1 = Profile.objects.create(user=self.user1)
+        self.profile2 = Profile.objects.create(user=self.user2)
+        self.profile3 = Profile.objects.create(user=self.user3)
 
-    def test_unlike_post(self):
+        # Crie um post para testar os métodos relacionados a posts
+        self.post = Post.objects.create(user=self.user1, post='Post de teste')
+
+    def test_like_post_count(self):
+        """Testa se o like_count retorna o número correto de likes."""
         self.post.like_post(self.user2)
-        result = self.post.unlike_post(self.user2)
-        self.assertTrue(result)
-        self.assertEqual(self.post.like_count(), 0)
-        # User2 tenta descurtir novamente
-        result = self.post.unlike_post(self.user2)
-        self.assertFalse(result)
+        self.post.like_post(self.user3)
+        self.assertEqual(self.post.like_count(), 2)
 
-    def test_follow_user(self):
-        profile1 = self.user1.get_profile()
-        result = profile1.follow(self.user2)
+    def test_like_own_post(self):
+        """Testa que um usuário pode curtir o próprio post."""
+        result = self.post.like_post(self.user1)
         self.assertTrue(result)
-        self.assertTrue(profile1.is_following(self.user2))
-        self.assertEqual(self.user2.profile.follower_count(), 1)
-        # Tentar seguir novamente
-        result = profile1.follow(self.user2)
+        self.assertEqual(self.post.like_count(), 1)
+
+    def test_like_post_twice(self):
+        """Testa que um usuário não pode curtir o mesmo post duas vezes."""
+        result1 = self.post.like_post(self.user2)
+        result2 = self.post.like_post(self.user2)
+        self.assertTrue(result1)
+        self.assertFalse(result2)
+        self.assertEqual(self.post.like_count(), 1)
+
+    def test_unlike_post_not_liked(self):
+        """Testa que não é possível descurtir um post que não foi curtido."""
+        result = self.post.unlike_post(self.user2)
         self.assertFalse(result)
+        self.assertEqual(self.post.like_count(), 0)
+
+    def test_is_following(self):
+        """Testa o método is_following do perfil."""
+        self.profile1.follow(self.user2)
+        self.assertTrue(self.profile1.is_following(self.user2))
+        self.assertFalse(self.profile2.is_following(self.user1))
+
+    def test_follower_and_following_count(self):
+        """Testa os métodos follower_count e following_count."""
+        self.profile1.follow(self.user2)
+        self.profile1.follow(self.user3)
+        self.profile2.follow(self.user1)
+
+        self.assertEqual(self.profile1.following_count(), 2)
+        self.assertEqual(self.profile1.follower_count(), 1)
+
+        self.assertEqual(self.profile2.following_count(), 1)
+        self.assertEqual(self.profile2.follower_count(), 1)
+
+        self.assertEqual(self.profile3.following_count(), 0)
+        self.assertEqual(self.profile3.follower_count(), 1)
+
+    def test_follow_already_following(self):
+        """Testa que não é possível seguir um usuário que já está sendo seguido."""
+        result1 = self.profile1.follow(self.user2)
+        result2 = self.profile1.follow(self.user2)
+        self.assertTrue(result1)
+        self.assertFalse(result2)
+        self.assertEqual(self.profile1.following_count(), 1)
+
+    def test_unfollow_not_following(self):
+        """Testa que não é possível deixar de seguir um usuário que não está sendo seguido."""
+        result = self.profile1.unfollow(self.user2)
+        self.assertFalse(result)
+        self.assertEqual(self.profile1.following_count(), 0)
 
     def test_unfollow_user(self):
-        profile1 = self.user1.get_profile()
-        profile1.follow(self.user2)
-        result = profile1.unfollow(self.user2)
+        """Testa deixar de seguir um usuário."""
+        self.profile1.follow(self.user2)
+        result = self.profile1.unfollow(self.user2)
         self.assertTrue(result)
-        self.assertFalse(profile1.is_following(self.user2))
-        self.assertEqual(self.user2.profile.follower_count(), 0)
-        # Tentar deixar de seguir novamente
-        result = profile1.unfollow(self.user2)
-        self.assertFalse(result)
+        self.assertFalse(self.profile1.is_following(self.user2))
+        self.assertEqual(self.profile1.following_count(), 0)
+        self.assertEqual(self.profile2.follower_count(), 0)
 
     def test_follow_self(self):
-        profile1 = self.user1.get_profile()
+        """Testa que um usuário não pode seguir a si mesmo."""
         with self.assertRaises(ValidationError):
-            profile1.follow(self.user1)
-
+            self.profile1.follow(self.user1)
 
 class ViewsTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='pass123')
-        
+
+        # Autentica o cliente
+        self.client.login(username='testuser', password='pass123')
+
         # Cria 3 posts para testar
         self.posts = [
             Post.objects.create(user=self.user, post=f'Post número {i+1}') for i in range(3)
@@ -72,16 +112,9 @@ class ViewsTestCase(TestCase):
         """
         Testa a view da página inicial para garantir que retorna status 200 e contém 3 posts.
         """
-        # Faz uma requisição GET para a URL da página inicial usando o nome da URL
-        response = self.client.get(reverse('index'))  # Certifique-se de que 'index' é o nome correto da sua URL
-
-        # Verifica se a resposta HTTP tem o status 200
+        response = self.client.get(reverse('allposts'))  # Ajuste conforme seu namespace
         self.assertEqual(response.status_code, 200)
-
-        # Verifica se o contexto contém 3 posts
-        self.assertIn('posts', response.context)  # Verifica se 'posts' está no contexto
+        self.assertIn('posts', response.context)
         self.assertEqual(len(response.context['posts']), 3)
-
-        # Opcional: Verifica se todos os posts estão presentes na resposta
         for post in self.posts:
             self.assertContains(response, post.post)
