@@ -32,13 +32,18 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
    git clone https://github.com/larissadcew/Network-django
    cd Network-django
 ```
-
-2.Instale as dependências:
+2.Realize as migrações do banco de dados:
 ```bash
-pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-3.Realize as migrações do banco de dados:
+3.Baixar dependencias:
+```bash
+python manage.py runserver
+```
+
+4.Execute o servidor:
 ```bash
 python manage.py runserver
 ```
