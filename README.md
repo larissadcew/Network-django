@@ -42,7 +42,7 @@ python manage.py migrate
 pip install -r requirements.txt
 ```
 
-4.Execute o servidor:
+4.Executar o servidor:
 ```bash
 python manage.py runserver
 ```
