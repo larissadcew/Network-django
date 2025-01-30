@@ -1,5 +1,3 @@
-# Run `python manage.py shell` and paste this snippet
-
 from network.models import Post, User
 
 user1 = User.objects.all()[0]
