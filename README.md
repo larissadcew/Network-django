@@ -1,7 +1,7 @@
 # 🌐 Social Network Platform
 ![image](docs/networkfoto.png)
 
-[Veja ao vivo](docs/Social.mp4)
+[Veja ao vivo no youtube](https://youtu.be/vg_AjNRmHig)
 
 Este é um projeto de plataforma de rede social desenvolvido com Django. Ele permite que os usuários criem e compartilhem posts, sigam outros usuários, curtam posts e gerenciem seus perfis.
 
