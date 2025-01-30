@@ -31,7 +31,7 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
    git clone https://github.com/larissadcew/Network-django
    cd Network-django
 ```
-2.Realize as migrações do banco de dados:
+2. Realize as migrações do banco de dados:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
