@@ -1,4 +1,5 @@
 # 🌐 Social Network Platform
+![image](docs/networkfoto.png)
 
 Este é um projeto de plataforma de rede social desenvolvido com Django. Ele permite que os usuários criem e compartilhem posts, sigam outros usuários, curtam posts e gerenciem seus perfis.
 
