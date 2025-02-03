@@ -1,4 +1,4 @@
-# 🌐 Social Network Platform
+# 🌐 Rede Social
 ![image](docs/networkfoto.png)
 
 [Veja ao vivo no youtube](https://youtu.be/vg_AjNRmHig)
