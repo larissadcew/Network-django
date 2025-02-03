@@ -28,8 +28,8 @@ Este é um projeto de plataforma de rede social desenvolvido com Django. Ele per
 
 1. **Clone o repositório**:
 ```bash
-   git clone https://github.com/larissadcew/Network-django
-   cd Network-django
+   git clone https://github.com/larissadcew/Rede-Social
+   cd Rede-Social
 ```
 2. Realize as migrações do banco de dados:
 ```bash
